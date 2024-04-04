@@ -11,7 +11,7 @@ def generate_password(length=10, use_uppercase=True, use_lowercase=True, use_dig
     if use_digits:
         characters += string.digits
     if use_special_chars:
-        characters += string.punctuation
+        characters += '!@%'
     
     if not characters:
         print("Please select at least one character type.")
@@ -20,62 +20,63 @@ def generate_password(length=10, use_uppercase=True, use_lowercase=True, use_dig
     password = ''.join(random.choice(characters) for _ in range(length))
     return password
 
+def save_passwords(passwords, filename):
+    with open(filename, 'w') as f:
+        for password in passwords:
+            f.write(password + '\n')
+        print(f"{len(passwords)} password(s) saved to {filename}")
+
+def load_passwords(filename):
+    passwords = []
+    with open(filename, 'r') as f:
+        for line in f:
+            passwords.append(line.strip())
+    return passwords
+
 def main():
     print("Welcome to the Random Password Generator!")
-    while True:
-        print("\nLanguage Options:")
-        print("1. English")
-        print("2. Dutch")
-        language_choice = input("Please choose your language (1 for English, 2 for Dutch): ")
-        
-        if language_choice == '1':
-            prompts = {
-                "generate": "Generate Password",
-                "exit": "Exit",
-                "num_passwords": "Enter the number of passwords to generate (default is 1): ",
-                "length": "Enter the length of each password (default is 10): ",
-                "uppercase": "Include uppercase letters? (y/n): ",
-                "lowercase": "Include lowercase letters? (y/n): ",
-                "digits": "Include digits? (y/n): ",
-                "special_chars": "Include special characters? (y/n): ",
-                "filename": "Enter the filename to save the passwords (e.g., passwords.txt): ",
-                "saved": "{} password(s) saved to {}",
-                "invalid_choice": "Invalid choice. Please enter 1 or 2."
-            }
-            break
-        elif language_choice == '2':
-            prompts = {
-                "generate": "Genereer Wachtwoord",
-                "exit": "Afsluiten",
-                "num_passwords": "Voer het aantal te genereren wachtwoorden in (standaard is 1): ",
-                "length": "Voer de lengte van elk wachtwoord in (standaard is 10): ",
-                "uppercase": "Inclusief hoofdletters? (j/n): ",
-                "lowercase": "Inclusief kleine letters? (j/n): ",
-                "digits": "Inclusief cijfers? (j/n): ",
-                "special_chars": "Inclusief speciale tekens? (j/n): ",
-                "filename": "Voer de bestandsnaam in om de wachtwoorden op te slaan (bijv. wachtwoorden.txt): ",
-                "saved": "{} wachtwoord(en) opgeslagen naar {}",
-                "invalid_choice": "Ongeldige keuze. Voer alstublieft 1 of 2 in."
-            }
-            break
-        else:
-            print("Invalid choice. Please enter 1 or 2.")
-
-    print("\n{}".format(prompts["welcome"]))
+    language_choice = input("Choose your language (English/Dutch): ").lower()
+    
+    if language_choice.startswith('d'):  # Dutch language
+        print("\nWelkom bij de Willekeurige Wachtwoord Generator!")
+        options = {
+            '1': "Genereer Wachtwoord",
+            '2': "Wachtwoorden Opslaan naar Bestand",
+            '3': "Wachtwoorden Laden van Bestand",
+            '4': "Exit"
+        }
+        prompts = {
+            '1': "Voer het aantal wachtwoorden in om te genereren (standaard is 1): ",
+            '2': "Voer het aantal wachtwoorden in om op te slaan (standaard is 1): ",
+            '3': "Voer de bestandsnaam in om wachtwoorden van te laden: "
+        }
+    else:  # English language (default)
+        print("\nWelcome to the Random Password Generator!")
+        options = {
+            '1': "Generate Password",
+            '2': "Save Passwords to File",
+            '3': "Load Passwords from File",
+            '4': "Exit"
+        }
+        prompts = {
+            '1': "Enter the number of passwords to generate (default is 1): ",
+            '2': "Enter the number of passwords to save (default is 1): ",
+            '3': "Enter the filename to load passwords from: "
+        }
     
     while True:
         print("\nOptions:")
-        print("1. {}".format(prompts["generate"]))
-        print("2. {}".format(prompts["exit"]))
-        choice = input("{}".format(prompts["choice"]))
+        for key, value in options.items():
+            print(f"{key}. {value}")
+        choice = input("Please enter your choice (1, 2, 3, or 4): ")
 
         if choice == '1':
-            num_passwords = int(input(prompts["num_passwords"]) or 1)
-            length = int(input(prompts["length"]) or 10)
-            use_uppercase = input(prompts["uppercase"]).lower() == 'y'
-            use_lowercase = input(prompts["lowercase"]).lower() == 'y'
-            use_digits = input(prompts["digits"]).lower() == 'y'
-            use_special_chars = input(prompts["special_chars"]).lower() == 'y'
+            num_passwords = int(input(prompts['1']) or 1)
+            length = int(input("Enter the length of each password (default is 10): ") or 10)
+            use_uppercase = input("Include uppercase letters? (y/n): ").lower() == 'y'
+            use_lowercase = input("Include lowercase letters? (y/n): ").lower() == 'y'
+            use_digits = input("Include digits? (y/n): ").lower() == 'y'
+            use_special_chars = input("Include special characters? (y/n): ").lower() == 'y'
             
             passwords = []
             for _ in range(num_passwords):
@@ -83,16 +84,29 @@ def main():
                 if password:
                     passwords.append(password)
             
-            filename = input(prompts["filename"])
-            with open(filename, 'w') as f:
-                for password in passwords:
-                    f.write(password + '\n')
-                print(prompts["saved"].format(num_passwords, filename))
+            print("\nGenerated Passwords:")
+            for password in passwords:
+                print(password)
+        
         elif choice == '2':
-            print("{}".format(prompts["exit_message"]))
+            num_passwords = int(input(prompts['2']) or 1)
+            passwords = [input("Enter the password to save: ") for _ in range(num_passwords)]
+            filename = input("Enter the filename to save the passwords (e.g., passwords.txt): ")
+            save_passwords(passwords, filename)
+        
+        elif choice == '3':
+            filename = input(prompts['3'])
+            passwords = load_passwords(filename)
+            print("\nLoaded Passwords:")
+            for password in passwords:
+                print(password)
+        
+        elif choice == '4':
+            print("Exiting...")
             break
+        
         else:
-            print("{}".format(prompts["invalid_choice"]))
+            print("Invalid choice. Please enter 1, 2, 3, or 4.")
 
 if __name__ == "__main__":
     main()
