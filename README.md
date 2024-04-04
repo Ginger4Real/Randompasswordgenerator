@@ -1,13 +1,13 @@
 # Random Password Generator
 
-This is a simple Python script that generates random passwords based on user preferences and saves them to a text file.
+This is a simple Python script that generates random passwords based on user preferences and saves them to a text file or to the console.
 
 ## Features
 
 - Allows the user to specify the length of the password(s).
 - Gives options to include uppercase letters, lowercase letters, digits, and special characters in the password(s).
 - Allows the user to specify the number of passwords to generate.
-- Saves the generated password(s) to a text file.
+- Saves the generated password(s) to a text file or the console.
 
 ## Dependencies
 
