@@ -46,7 +46,7 @@ def main():
             '4': "Exit"
         }
         prompts = {
-            '1': "Voer het aantal wachtwoorden in om te genereren (standaard is 1): ",
+            '1': "",  # No prompt needed for generating passwords
             '2': "Voer het aantal wachtwoorden in om op te slaan (standaard is 1): ",
             '3': "Voer de bestandsnaam in om wachtwoorden van te laden: "
         }
@@ -59,7 +59,7 @@ def main():
             '4': "Exit"
         }
         prompts = {
-            '1': "Enter the number of passwords to generate (default is 1): ",
+            '1': "",  # No prompt needed for generating passwords
             '2': "Enter the number of passwords to save (default is 1): ",
             '3': "Enter the filename to load passwords from: "
         }
@@ -71,7 +71,6 @@ def main():
         choice = input("Please enter your choice (1, 2, 3, or 4): ")
 
         if choice == '1':
-            num_passwords = int(input(prompts['1']) or 1)
             length = int(input("Enter the length of each password (default is 10): ") or 10)
             use_uppercase = input("Include uppercase letters? (y/n): ").lower() == 'y'
             use_lowercase = input("Include lowercase letters? (y/n): ").lower() == 'y'
@@ -79,12 +78,11 @@ def main():
             use_special_chars = input("Include special characters? (y/n): ").lower() == 'y'
             
             passwords = []
-            for _ in range(num_passwords):
-                password = generate_password(length, use_uppercase, use_lowercase, use_digits, use_special_chars)
-                if password:
-                    passwords.append(password)
+            password = generate_password(length, use_uppercase, use_lowercase, use_digits, use_special_chars)
+            if password:
+                passwords.append(password)
             
-            print("\nGenerated Passwords:")
+            print("\nGenerated Password:")
             for password in passwords:
                 print(password)
         
