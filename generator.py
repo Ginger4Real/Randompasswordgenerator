@@ -17,7 +17,12 @@ def generate_password(length=10, use_uppercase=True, use_lowercase=True, use_dig
         print("Please select at least one character type.")
         return None
     
-    password = ''.join(random.choice(characters) for _ in range(length))
+    # Ensure there is at least one special character in the password
+    if use_special_chars:
+        password = random.choice('!@%') + ''.join(random.choice(characters) for _ in range(length - 1))
+    else:
+        password = ''.join(random.choice(characters) for _ in range(length))
+        
     return password
 
 def save_passwords(passwords, filename):
